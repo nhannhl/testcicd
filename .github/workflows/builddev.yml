@@ -22,4 +22,4 @@ jobs:
           git pull
           docker stop testgit
           docker build . -t testgit
-          docker run --itd -rm --name testgit -p 3358:3000 testgit
+          docker run --itd --rm --name testgit -p 3358:3000 testgit
