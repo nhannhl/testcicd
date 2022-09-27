@@ -10,7 +10,8 @@ jobs:
     name: Output value
       runs-on: ubuntu-latest
       steps:
-      - run: |
+      - name: test
+        run: |
           echo "Is MR ${{ github.event.pull_request.merged == true }}"
           echo "Is Push boolean ${{ github.event.push == true }}"
           echo "Is Push ${{ github.event.push }}"
