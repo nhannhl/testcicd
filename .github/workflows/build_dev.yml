@@ -7,12 +7,21 @@ on:
     types: [ closed ]
 jobs:
   build_job:
+    name: build
+    if: github.event.pull_request.merged == true || github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
-    - name: test
-      run: |
-        echo "Is MR ${{ github.event.pull_request.merged == true }}"
-        echo "Is Push boolean ${{ github.event.push == true }}"
-        echo "Is Push ${{ github.event.push }}"
-        echo "Is Push name ${{ github.event_name }}"
+    - name: ssh to server
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.SSHKEY }}
+        script: |
+          cd ../nhantest/testdev
+          git pull
+          docker stop devdocker
+          docker build . -t devdocker
+          docker run -itd --rm --name devdocker -p 3358:80 devdocker
+          docker rmi $(docker images --filter 'dangling=true' -q)
       
