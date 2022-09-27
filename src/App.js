@@ -10,6 +10,7 @@ function App() {
           Edit <code>src/App.js</code> and save to reload.
         </p>
         <p>Add from develop branch</p>
+        <p>Add from develop branch - seceond time</p>
         <a
           className="App-link"
           href="https://reactjs.org"
