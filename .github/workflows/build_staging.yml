@@ -8,7 +8,7 @@ on:
 jobs:
   build_job:
     name: build
-    if: github.event.pull_request.merged == true || github.event.push
+    if: github.event.pull_request.merged == true || github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
     - name: ssh to server
