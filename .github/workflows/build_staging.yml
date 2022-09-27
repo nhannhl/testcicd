@@ -1,0 +1,26 @@
+name: build_staging
+on:
+  push:
+    branches: [ "staging" ]
+  pull_request:
+    branches: [ "staging" ]
+    types: [ closed ]
+jobs:
+  build_job:
+    name: build
+    if: github.event.pull_request.merged == true || github.event.push
+    runs-on: ubuntu-latest
+    steps:
+    - name: ssh to server
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.SSHKEY }}
+        script: |
+          cd ${{ secrets.STG_FOLDER }}
+          git pull
+          docker stop ${{ secrets.DOCKER_NAME_STG }}
+          docker build . -t ${{ secrets.DOCKER_NAME_STG }}
+          docker run -itd --rm --name ${{ secrets.DOCKER_NAME_STG }} -p ${{ secrets.STG_PORT }}:3000 ${{ secrets.DOCKER_NAME_STG }}
+          docker rmi $(docker images --filter 'dangling=true' -q)

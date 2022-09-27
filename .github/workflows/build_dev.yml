@@ -1,12 +1,14 @@
-name: builddev
+name: build_dev
 on:
+  push:
+    branches: [ "develop" ]
   pull_request:
     branches: [ "develop" ]
     types: [ closed ]
 jobs:
-  merge_job:
+  build_job:
     name: build
-    if: github.event.pull_request.merged == true
+    if: github.event.pull_request.merged == true || github.event.push
     runs-on: ubuntu-latest
     steps:
     - name: ssh to server
@@ -16,9 +18,9 @@ jobs:
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.SSHKEY }}
         script: |
-          cd ../nhantest/testcicd
+          cd ../nhantest/testdev
           git pull
-          docker stop testgit
-          docker build . -t testgit
-          docker run -itd --rm --name testgit -p 3358:3000 testgit
+          docker stop devdocker
+          docker build . -t devdocker
+          docker run -itd --rm --name devdocker -p 3358:80 devdocker
           docker rmi $(docker images --filter 'dangling=true' -q)
