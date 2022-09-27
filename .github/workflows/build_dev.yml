@@ -8,8 +8,10 @@ on:
 jobs:
   build_job:
     name: Output value
-      run: |
-        echo "Is MR ${{ github.event.pull_request.merged == true }}"
-        echo "Is Push boolean ${{ github.event.push == true }}"
-        echo "Is Push ${{ github.event.push }}"
-        echo "Is Push name ${{ github.event_name }}"
+      runs-on: ubuntu-latest
+      steps:
+        run: |
+          echo "Is MR ${{ github.event.pull_request.merged == true }}"
+          echo "Is Push boolean ${{ github.event.push == true }}"
+          echo "Is Push ${{ github.event.push }}"
+          echo "Is Push name ${{ github.event_name }}"
